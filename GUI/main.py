@@ -18,7 +18,6 @@ class MainWindow(QtWidgets.QMainWindow,simple.Ui_MainWindow):
         file=QtWidgets.QFileDialog.getOpenFileName(self,"Выберите файл")
         if file:
             self.file_name=file[0]
-        print(self.file_name)
 
 
 
