@@ -116,30 +116,28 @@ from pulp import LpMaximize,LpProblem,LpStatus,LpVariable
 # 3x1+2x2+x3<=100(сырьё А)
 # x2+2x3+3x4<=90(материал В)
 # x1,x2,x3,x4>=0
-
 #-------------------------------------------------
+# model=LpProblem(name="resource-allocation",sense=LpMaximize)
 
-model=LpProblem(name="resource-allocation",sense=LpMaximize)
+# # описываем переменные
+# # x1,x2,x3,x4
+# x={i:LpVariable(name=f'x{i}',lowBound=0) for i in range(1,5)}
 
-# описываем переменные
-# x1,x2,x3,x4
-x={i:LpVariable(name=f'x{i}',lowBound=0) for i in range(1,5)}
+# #добавляем ограничения
+# model+=(lpSum(x.values())<=50,"manpower")
+# model+=(3*x[1]+2*x[2]+x[3]<=100,"matherial_a")
+# model+=(x[2]+2*x[3]+3*x[4]<=90,"material_b")
 
-#добавляем ограничения
-model+=(lpSum(x.values())<=50,"manpower")
-model+=(3*x[1]+2*x[2]+x[3]<=100,"matherial_a")
-model+=(x[2]+2*x[3]+3*x[4]<=90,"material_b")
+# #описываем цель
+# model+=20*x[1]+12*x[2]+40*x[3]+25*x[4]
 
-#описываем цель
-model+=20*x[1]+12*x[2]+40*x[3]+25*x[4]
+# status=model.solve()
 
-status=model.solve()
+# print(f"status: {model.status}, {LpStatus[model.status]}")
+# print(f"objective: {model.objective.value()}")
 
-print(f"status: {model.status}, {LpStatus[model.status]}")
-print(f"objective: {model.objective.value()}")
+# for var in x.values():
+#     print(f"{var.name}: {var.value()}")
 
-for var in x.values():
-    print(f"{var.name}: {var.value()}")
-
-for name, constraint in model.constraints.items():
-    print(f"{name}: {constraint.value()}")
+# for name, constraint in model.constraints.items():
+#     print(f"{name}: {constraint.value()}")

@@ -1,52 +1,41 @@
-from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QDate
-
-Form, Window = uic.loadUiType("simple.ui")
-
-app = QApplication([])
-window = Window()
-form = Form()
-form.setupUi(window)
-window.show()
+import sys
+from PyQt5 import QtWidgets, uic
+import simple
+import os
 
 
+class MainWindow(QtWidgets.QMainWindow,simple.Ui_MainWindow):
 
-def on_click():
-    print(form.plainTextEdit.toPlainText())
-    print('ClickiT!')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.file_name=None
+        self.setupUi(self)
+        self.btnBrowse.clicked.connect(self.getFileName)
 
+    def getFileName(self):
 
-def on_click_calendar():
-    global start_date,calc_date
-    form.dateEdit.setDate(form.calendarWidget.selectedDate())
-    calc_date=form.calendarWidget.selectedDate()
-    delta_days=start_date.daysTo(calc_date)
-    print(delta_days)
-    form.label_3.setText(f"До наступления события осталось {delta_days} дней!")
-
-
-def on_dateedit_change():
-    global start_date,calc_date
-    form.calendarWidget.setSelectedDate(form.dateEdit.date())
-    calc_date=form.dateEdit.date()
-    delta_days=start_date.daysTo(calc_date)
-    print(delta_days)
-    form.label_3.setText(f"До наступления события осталось {delta_days} дней!")
+        self.listWidget.clear()
+        file=QtWidgets.QFileDialog.getOpenFileName(self,"Выберите файл")
+        if file:
+            self.file_name=file[0]
+        print(self.file_name)
 
 
 
 
-form.pushButton.clicked.connect(on_click)
-form.calendarWidget.clicked.connect(on_click_calendar)
-form.dateEdit.dateChanged.connect(on_dateedit_change)
 
 
-start_date=form.calendarWidget.selectedDate()
-calc_date=form.calendarWidget.selectedDate()
-form.label.setText(f"Трекер события от: {start_date.toString('dd-MM-yyyy')}")
-
-on_click_calendar()
 
 
-app.exec()
+
+
+
+
+def main():
+    app=QtWidgets.QApplication(sys.argv)
+    window=MainWindow()
+    window.show()
+    sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
