@@ -9,14 +9,16 @@ class Excel:
         self.stocks=0
         self.needs=0
         self.mainMatrix=[]
+        self.listOfConsumers=[]
+        self.listOfSuppliers=[]
 
 
-    def getStocksInfo(self):
+    def getSumStocks(self):
         for row in range(3,6):
             self.stocks+=self.sheet[row][5].value
         return self.stocks
 
-    def getNeedsInfo(self):
+    def getSumNeeds(self):
         for col in range(1,5):
             self.needs+=self.sheet[6][col].value
         return self.needs
@@ -28,3 +30,26 @@ class Excel:
                 self.help.append(self.sheet[row][col].value)
             self.mainMatrix.append(self.help)
         return self.mainMatrix
+
+
+    def getAllStocks(self,row):
+        return self.sheet[row][5].value
+
+    def getAllNeeds(self,col):
+        return self.sheet[6][col].value
+
+
+    def getAllConsumers(self):
+        for col in range(1,5):
+            self.listOfConsumers.append(self.sheet[2][col].value)
+        return self.listOfConsumers
+
+    def getAllSuppliers(self):
+        for row in range(3,6):
+            self.listOfSuppliers.append(self.sheet[row][0].value)
+        return self.listOfSuppliers
+
+
+# obj=Excel("task.xlsx")
+
+# print(obj.getAllSuppliers())

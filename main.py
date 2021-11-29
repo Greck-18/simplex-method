@@ -1,143 +1,71 @@
+from pulp import LpMaximize,LpProblem,LpStatus,LpVariable,GLPK,GLPK_CMD,value
+from pulp.constants import LpMinimize
 from pulp.pulp import lpSum
-from scipy import linalg
-from scipy.optimize import linprog
-
-from pulp import LpMaximize,LpProblem,LpStatus,LpVariable
-
-#SciPy
-#---------------------------------------------
-# linprog() решает только задачи минимизации (не максимизации) и не допускает ограничений-неравенств со знаком больше или равно (≥). Чтобы обойти эти проблемы, нам необходимо изменить описание задачи перед запуском оптимизации:(вместо максимизации мы
-# всё минимизируем ( т.е домнажаем на -1) и вместо знака >= , ставим противоположный знак , домнажая на -1)
 
 
-# оптимизация и поиск корней для линейного программирования
-#-------------------------------------------
-# z=x+2y
-# 2x+y<=20
-# -4x+5y<=10
-# -x+2y>=-2
-# -x+5y=15
-# x>=0
-# y>=0
-# домножаем на -1 главную функцию и там где знак >=
-#-z=-x-2y
-# 2x+y<=20
-# -4x+5y<=10
-# x-2y<=2
-#-x+5y=15
-# x>=0
-# y>=0
-#----------------------------------------------
-# obj=[-1,-2]
+N=4
+M=3
 
-# left_ineq=[[2,1],[-4,5],[1,-2]]
-# right_ineq=[20,10,2]
-# left_eq=[[-1,5]]
-# right_eq=[15]
 
-# bnd=[(0,float("inf")),(0,float('inf'))] # границы
+xindex=[(range(1,M+1)[i],range(1,N+1)[j]) for j in range(N) for i in range(M)]
 
-# opt=linprog(c=obj,A_ub=left_ineq,b_ub=right_ineq,
-#             A_eq=left_eq,b_eq=right_eq,bounds=bnd,
-#             method="revised simplex")
 
-#--------------------------------------------------
+model=LpProblem("Transportation_LP_Problem",LpMinimize)
 
-# решение задача о производстве(о продуктах, раб. #силе силе,используемое сырьё)
-#----------------------------------------
-# 20x1 + 12x2 + 40x3 +25x4 - profit
-# x1+x2+x3+x4<=50(раб сила)
-# 3x1+2x2+x3<=100(сырьё А)
-# x2+2x3+3x4<=90(материал В)
-# x1,x2,x3,x4>=0
+x=LpVariable.dicts("x",xindex,0,None)
+# print(x)
 
-#-----------------------------------------
-
-# obj=[-20,-12,-40,-25]
-# left_ineq=[[1,1,1,1],[3,2,1,0],[0,1,2,3]]
-# right_ineq=[50,100,90]
-# opt=linprog(c=obj,A_ub=left_ineq,b_ub=right_ineq,
-#     method="revised simplex")
-
-# print(opt)
-
-#-------------------------------------------------
-
-#Pulp
-#------------------------------------------------
-#в pulp уже можно решать задачу максимизации без вмешательств , не надо умножать на -1
-
-# условие :
-#-----------------------------------------------
-# z=x+2y
-# 2x+y<=20
-# -4x+5y<=10
-# -x+2y>=-2
-# -x+5y=15
-# x>=0
-# y>=0
-#------------------------------------------------
-
-# model=LpProblem(name="small-problem",sense=LpMaximize)
-
-# x=LpVariable(name="x",lowBound=0)
-# y=LpVariable(name="y",lowBound=0)
+# model+=2.0*x[1,1]+3.0*x[1,2]+4.0*x[1,3]+2.0*x[1,4]+8.0*x[2,1]+4.0*x[2,2]+1.0*x[2,3]+4.0*x[2,4]+9.0*x[3,1]+7.0*x[3,2]+3.0*x[3,3]+6.0*x[3,4]
 
 
 
-# model+=(2*x+y<=20,"red_constraint")
-# model+=(4*x-5*y>=-10,"blue_constraint")
-# model+=(-x+2*y>=-2,"yellow_constraint")
-# model+=(-x+5*y==15,"green_constraint")
+# print(model)
 
-# #целевая функция
-# obj_func=x+2*y
-# model+=obj_func
-
-# status=model.solve()
-
-# print(f"status:{model.status}, {LpStatus[model.status]}")
-
-# print(f"objective: {model.objective.value()}")
-
-# for var in model.variables():
-#     print(f"{var.name}: {var.value}")
+# for i in range(1,4):
+#     for j,k in enumerate(a[i-1]):
+#         model+=lpSum(x[i,j+1])
 
 
-# for name,constraint in model.constraints.items():
-#     print(f"{name}: {constraint.value()}")
 
-#------------------------------------------------
 
-# решение о производстве
-#---------------------------------------------------
-# 20x1 + 12x2 + 40x3 +25x4 - profit
-# x1+x2+x3+x4<=50(раб сила)
-# 3x1+2x2+x3<=100(сырьё А)
-# x2+2x3+3x4<=90(материал В)
-# x1,x2,x3,x4>=0
-#-------------------------------------------------
-# model=LpProblem(name="resource-allocation",sense=LpMaximize)
+# , "Transportation cost"
 
-# # описываем переменные
-# # x1,x2,x3,x4
-# x={i:LpVariable(name=f'x{i}',lowBound=0) for i in range(1,5)}
 
-# #добавляем ограничения
-# model+=(lpSum(x.values())<=50,"manpower")
-# model+=(3*x[1]+2*x[2]+x[3]<=100,"matherial_a")
-# model+=(x[2]+2*x[3]+3*x[4]<=90,"material_b")
+# for i in range(1,N+1):
+#     model+=x[1,i]+x[2,i]+x[3,i]>=100
 
-# #описываем цель
-# model+=20*x[1]+12*x[2]+40*x[3]+25*x[4]
+# print(model)
 
-# status=model.solve()
+# for i in range(1,M+1):
+#         if i==1:
+#             value1=140
+#         elif i==2:
+#             value1=160
+#         else:
+#             value1=120
+#         model+=x[i,1]+x[i,2]+x[i,3]+x[i,4]<=value1
 
-# print(f"status: {model.status}, {LpStatus[model.status]}")
-# print(f"objective: {model.objective.value()}")
+# print(model)
+# model+=x[1,1]+x[1,2]+x[1,3]+x[1,4] <=140.0
+# model+=x[2,1]+x[2,2]+x[2,3]+x[2,4] <=160.0
+# model+=x[3,1]+x[3,2]+x[3,3]+x[3,4] <=120.0
 
-# for var in x.values():
-#     print(f"{var.name}: {var.value()}")
+# print(model)
 
-# for name, constraint in model.constraints.items():
-#     print(f"{name}: {constraint.value()}")
+
+
+# model+=x[1,1]+x[2,1]+x[3,1] >=150.0
+# model+=x[1,2]+x[2,2]+x[3,2] >=90.0
+# model+=x[1,3]+x[2,3]+x[3,3] >=100.0
+# model+=x[1,4]+x[2,4]+x[3,4] >=80.0
+
+# model.solve()
+
+# print("Status:",LpStatus[model.status])
+
+# print('-'*10)
+
+# for v in model.variables():
+#     print(v.name,"=",v.varValue)
+
+# print("Objective Function",value(model.objective))
