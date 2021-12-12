@@ -8,9 +8,14 @@ class Excel:
         self.sheet=self.book.active
         self.stocks=0
         self.needs=0
+        self.name_suppliers=[]
         self.mainMatrix=[]
         self.listOfConsumers=[]
         self.listOfSuppliers=[]
+
+
+    def getNameSuppliers(self,row):
+        return self.sheet[row][0].value
 
 
     def getSumStocks(self):
@@ -52,4 +57,4 @@ class Excel:
 
 # obj=Excel("task.xlsx")
 
-# print(obj.getAllSuppliers())
+# print(obj.getNameSuppliers())

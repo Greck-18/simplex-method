@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>579</height>
+    <width>978</width>
+    <height>704</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>460</y>
+      <y>550</y>
       <width>141</width>
       <height>61</height>
      </rect>
@@ -37,8 +37,8 @@
    <widget class="QProgressBar" name="progressBar">
     <property name="geometry">
      <rect>
-      <x>7</x>
-      <y>420</y>
+      <x>0</x>
+      <y>510</y>
       <width>591</width>
       <height>23</height>
      </rect>
@@ -50,7 +50,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>800</x>
       <y>0</y>
       <width>191</width>
       <height>20</height>
@@ -73,8 +73,8 @@
    <widget class="QPushButton" name="btnBrowse">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>410</y>
+      <x>730</x>
+      <y>510</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -93,23 +93,42 @@
      <string>Загрузить файл</string>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidget">
+   <widget class="QPushButton" name="btnTamplate">
     <property name="geometry">
      <rect>
-      <x>575</x>
-      <y>20</y>
-      <width>221</width>
-      <height>381</height>
+      <x>850</x>
+      <y>510</y>
+      <width>111</width>
+      <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>шаблон файла</string>
+    </property>
    </widget>
-   <widget class="QWidget" name="widget" native="true">
+   <widget class="QTextBrowser" name="textBrowser">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
-      <width>551</width>
-      <height>391</height>
+      <y>20</y>
+      <width>711</width>
+      <height>481</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="textBrowser_2">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>20</y>
+      <width>241</width>
+      <height>481</height>
      </rect>
     </property>
    </widget>
@@ -119,7 +138,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>978</width>
      <height>26</height>
     </rect>
    </property>
