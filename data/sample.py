@@ -12,6 +12,7 @@ class Excel:
         self.mainMatrix=[]
         self.listOfConsumers=[]
         self.listOfSuppliers=[]
+        self.all_info=[]
 
 
     def getNameSuppliers(self,row):
@@ -55,6 +56,11 @@ class Excel:
         return self.listOfSuppliers
 
 
-# obj=Excel("task.xlsx")
+    def getAllInfo(self):
+        for row in range(3,7):
+            for col in range(6):
+                self.all_info.append(self.sheet[row][col].value)
+        return self.all_info
 
-# print(obj.getNameSuppliers())
+
+
